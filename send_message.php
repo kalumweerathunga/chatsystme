@@ -15,7 +15,6 @@
 	if(isset($_POST['res'])){
 		$id = $_POST['id'];
 		$msg = $_POST['msg'];
-		echo $msg;
 
 		if(!$msg=null){
 			?>
@@ -23,20 +22,19 @@
 				$query=mysqli_query($conn,"select * from `chat` left join `user` on user.userid=chat.userid where chat_room_id='$id' and chat.userid='$user_id' order by chat_date asc") or die(mysqli_error());
 				while($row=mysqli_fetch_array($query)){
 			?>
-				<div>
+				<div style="background: burlywood;margin-top: 12px;">
 					<?php echo date('h:i A',strtotime($row['chat_date'])); ?><br>
 					<?php echo $row['your_name']; ?>: <?php echo $row['chat_msg']; ?><br>
-
 				</div>
 				<br>
 			<?php
-					$keywords = "hello world";
-					$keyword_tokens = explode(' ', $msg);
-					foreach($keyword_tokens  as $keyword) {
-						$sql = mysqli_query($conn,"SELECT * FROM chat WHERE chat_msg LIKE'%$keyword%'");
-						while($row=mysqli_fetch_array($sql)){
-							echo "Hospital:" .$row['chat_msg'];
-						}
+						$keyword_tokens = $row['chat_msg'];
+						$sql = mysqli_query($conn,"SELECT * FROM chat WHERE chat_msg LIKE'%$keyword_tokens%' LIMIT 1");
+						while($row=mysqli_fetch_array($sql)){ ?>
+						<div style="background: coral;">
+							<?php echo "Hospital:" .$row['chat_msg']; ?>
+						</div>
+						<?php
 					}
 				}
 			}
